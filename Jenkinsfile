@@ -17,19 +17,6 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                dir('backend') {
-                    sh '''
-                        python3 -m venv venv
-                        . venv/bin/activate
-                        pip install -r requirements.txt
-                        pytest test_main.py -v
-                    '''
-                }
-            }
-        }
-
         stage('Build') {
             steps {
                 // Build Backend image locally (no push required for local K8s demo)
@@ -42,6 +29,13 @@ pipeline {
                     sh "docker build -t ${FRONTEND}:${IMAGE_TAG} ."
                     sh "docker tag ${FRONTEND}:${IMAGE_TAG} ${FRONTEND}:latest"
                 }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run pytest directly inside the freshly built Docker container!
+                sh "docker run --rm ${BACKEND}:${IMAGE_TAG} pytest test_main.py -v"
             }
         }
 
