@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Anti-Pattern & Debug Logger — Log, compare, and learn from code anti-patterns." />
+    <title>Debug Logger — Anti-Pattern Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- ==================== HEADER ==================== -->
+    <header id="app-header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">🐛</span>
+                <h1>Debug Logger</h1>
+            </div>
+            <nav>
+                <button id="btn-nav-dashboard" class="nav-btn active" data-view="dashboard">
+                    <span class="nav-icon">📊</span> Dashboard
+                </button>
+                <button id="btn-nav-new" class="nav-btn" data-view="form">
+                    <span class="nav-icon">➕</span> New Log
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="app-main">
+        <!-- ==================== DASHBOARD VIEW ==================== -->
+        <section id="view-dashboard" class="view active">
+            <div class="dashboard-toolbar">
+                <h2>Anti-Pattern Logs</h2>
+                <div class="filter-bar">
+                    <input
+                        type="text"
+                        id="input-filter-tag"
+                        placeholder="Filter by tag…"
+                        autocomplete="off"
+                    />
+                    <button id="btn-filter" class="btn btn-secondary">Filter</button>
+                    <button id="btn-clear-filter" class="btn btn-ghost">Clear</button>
+                </div>
+            </div>
+
+            <div id="logs-grid" class="logs-grid">
+                <!-- Cards injected by JS -->
+            </div>
+
+            <div id="empty-state" class="empty-state hidden">
+                <span class="empty-icon">📭</span>
+                <p>No logs yet. Create your first anti-pattern log!</p>
+            </div>
+        </section>
+
+        <!-- ==================== FORM VIEW ==================== -->
+        <section id="view-form" class="view">
+            <h2>Log a New Anti-Pattern</h2>
+            <form id="log-form" autocomplete="off">
+                <div class="form-group">
+                    <label for="input-title">Title</label>
+                    <input type="text" id="input-title" required placeholder="e.g. Mutable Default Argument" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="input-anti-pattern">Anti-Pattern Code</label>
+                        <textarea id="input-anti-pattern" rows="10" required placeholder="Paste the buggy / anti-pattern code here…"></textarea>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="input-working-code">Working Code</label>
+                        <textarea id="input-working-code" rows="10" required placeholder="Paste the corrected / working code here…"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-root-cause">Root Cause</label>
+                    <textarea id="input-root-cause" rows="4" required placeholder="Explain why the anti-pattern is wrong…"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="input-tags">Tags <span class="hint">(comma-separated)</span></label>
+                    <input type="text" id="input-tags" placeholder="e.g. python, functions, beginner" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="btn-submit" class="btn btn-primary">
+                        <span class="btn-icon">💾</span> Save Log
+                    </button>
+                    <button type="reset" id="btn-reset" class="btn btn-ghost">Clear</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ==================== DETAIL / DIFF VIEW ==================== -->
+        <section id="view-detail" class="view">
+            <button id="btn-back" class="btn btn-ghost back-btn">← Back to Dashboard</button>
+            <div id="detail-header" class="detail-header">
+                <h2 id="detail-title"></h2>
+                <div id="detail-tags" class="tag-list"></div>
+                <time id="detail-date"></time>
+            </div>
+
+            <div class="diff-container">
+                <div class="diff-pane bad">
+                    <div class="diff-label">❌ Anti-Pattern</div>
+                    <pre><code id="detail-anti-pattern"></code></pre>
+                </div>
+                <div class="diff-divider"></div>
+                <div class="diff-pane good">
+                    <div class="diff-label">✅ Working Code</div>
+                    <pre><code id="detail-working-code"></code></pre>
+                </div>
+            </div>
+
+            <div class="root-cause-section">
+                <h3>Root Cause</h3>
+                <div id="detail-root-cause" class="root-cause-content"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== TOAST ==================== -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

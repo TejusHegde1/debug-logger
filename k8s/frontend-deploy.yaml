@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: debug-logger
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: debug-logger
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: debug-logger
+        tier: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: debug-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 2
+            periodSeconds: 5

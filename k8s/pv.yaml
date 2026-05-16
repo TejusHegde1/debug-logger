@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: debug-logger-pv
+spec:
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /tmp/debug-logger-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: debug-logger-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: debug-logger
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug-logger
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: debug-logger
+        tier: backend
+    spec:
+      containers:
+        - name: backend
+          image: debug-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_PATH
+              value: /data/debug_logs.db
+          volumeMounts:
+            - name: db-storage
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: debug-logger-pvc
