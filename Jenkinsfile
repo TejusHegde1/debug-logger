@@ -63,6 +63,9 @@ pipeline {
 
         stage('Deploy') {
             steps {
+                // Ensure all base Kubernetes resources exist first (in case they were deleted)
+                sh "kubectl apply -f k8s/"
+                
                 // Update the Kubernetes deployments with new images
                 sh "kubectl set image deployment/backend backend=${BACKEND}:${IMAGE_TAG}"
                 sh "kubectl set image deployment/frontend frontend=${FRONTEND}:${IMAGE_TAG}"
