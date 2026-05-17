@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        PATH        = "/usr/local/bin:/opt/homebrew/bin:/bin:/usr/bin:/usr/sbin:/sbin"
         REGISTRY    = 'local-demo'   // Using a local tag for the Mac demo
         FRONTEND    = "${REGISTRY}/debug-frontend"
         BACKEND     = "${REGISTRY}/debug-backend"
